@@ -1,0 +1,75 @@
+FUNCTION_BLOCK color_fb
+
+VAR_INPUT
+	red: REAL;
+	green: REAL;
+	blue: REAL;
+END_VAR
+
+VAR_OUTPUT
+	color: REAL;
+END_VAR
+
+FUZZIFY red
+	TERM low := (0, 1) (4, 0) ;
+    TERM medium := (1, 0) (4,1) (6,1) (9,0);
+    TERM high := (6, 0) (10, 1);
+END_FUZZIFY
+
+FUZZIFY green
+	TERM low := (0, 1) (4, 0) ;
+    TERM medium := (1, 0) (4,1) (6,1) (9,0);
+    TERM high := (6, 0) (10, 1);
+END_FUZZIFY
+
+FUZZIFY blue
+	TERM low := (0, 1) (4, 0) ;
+    TERM medium := (1, 0) (4,1) (6,1) (9,0);
+    TERM high := (6, 0) (10, 1);
+END_FUZZIFY
+
+
+DEFUZZIFY color
+    TERM rojo := (0,0) (5,1) (10,0);
+    TERM verde := (10,0) (15,1) (20,0);
+    TERM azul := (20,0) (25,1) (30,0);
+    TERM amarillo := (30,0) (35,1) (40,0);
+    TERM cian := (40,0) (45,1) (50,0);
+    TERM fucsia := (50,0) (55,1) (60,0);
+    TERM blanco := (60,0) (65,1) (70,0);
+    TERM negro := (70,0) (75,1) (80,0);
+    TERM naranja := (80,0) (85,1) (90,0);
+
+    METHOD : COG;
+
+    DEFAULT := 0;
+
+END_DEFUZZIFY
+
+
+
+RULEBLOCK No1
+
+    AND : MIN;
+
+    ACT : MIN;
+
+    ACCU : MAX;
+
+    RULE 1 : IF red IS high AND green IS low AND blue IS low THEN color IS rojo;
+    RULE 2 : IF green IS high AND red IS low AND blue IS low THEN color IS verde;
+    RULE 3 : IF blue IS high AND red IS low AND green IS low THEN color IS azul;
+    RULE 4 : IF red IS high AND green IS high AND blue IS low THEN color IS amarillo;
+    RULE 5 : IF red IS high AND blue IS high AND green IS low THEN color IS fucsia;
+    RULE 6 : IF red IS high AND green IS high AND blue IS medium THEN color IS amarillo;
+    RULE 7 : IF red IS high AND green IS high AND blue IS high THEN color is blanco;
+    RULE 8 : IF red IS low AND green IS low AND blue IS low THEN color IS negro;
+    RULE 9 : IF red is high AND green IS medium AND blue IS low THEN color IS naranja;
+    RULE 10: IF green IS medium AND red IS low AND blue IS low THEN color IS verde;
+
+
+
+END_RULEBLOCK
+
+
+END_FUNCTION_BLOCK
